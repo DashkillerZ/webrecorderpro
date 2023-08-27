@@ -3,6 +3,8 @@
 
 Program that efficiently uses MediaRecorder API to record video+audio, audio, screen
 
+`Note:Before using this project .env file must be added to ./server in order to try authentication`
+
 ### To start server :
 ```
 cd server
