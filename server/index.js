@@ -10,7 +10,7 @@ const cors = require('cors');
 app.use(cors({ origin: 'http://localhost:5173' }));
 
 const mongoose = require("mongoose");
-const uri = "mongodb+srv://ompateldeveloper:8f2rYTicct3xmrTo@cluster0.pzdo3di.mongodb.net/talkvalley?retryWrites=true&w=majority";
+const uri = process.env.URI;
 mongoose.connect(uri)
 
 .then(()=>{

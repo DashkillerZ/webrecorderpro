@@ -1,5 +1,5 @@
 import Home from "./pages/Home"
-import { Route, Routes, useNavigate} from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import { GlobalContext } from './context/GlobalContext';
 import { useEffect, useState } from "react";
@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(false);
-  
+
   const navigate = useNavigate();
   let user = undefined;
-  useEffect(()=>{
+  useEffect(() => {
     user = JSON.parse(localStorage.getItem('user'));
     setUserName(user?.user?.name)
     // if(user?.token ){
@@ -21,26 +21,26 @@ function App() {
     // else{
     //   navigate('/login')
     // }
-    
-    
-  },[])
-  const handleLogout= ()=>{
-      navigate('/login')
-      localStorage.removeItem('user')
-      
+
+
+  }, [])
+  const handleLogout = () => {
+    navigate('/login')
+    localStorage.removeItem('user')
+
   }
   return (
     <div>
-      <GlobalContext.Provider value={{isLoggedIn, setIsLoggedIn,navigate,userName,handleLogout}}>
+      <GlobalContext.Provider value={{ isLoggedIn, setIsLoggedIn, navigate, userName, handleLogout }}>
 
         <Routes>
 
-          {<Route path="/" element={<Home/>} />}
-          <Route path="/login" element={<Login/>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
 
         </Routes>
-      </GlobalContext.Provider> 
-        
+      </GlobalContext.Provider>
+
     </div>
   )
 }

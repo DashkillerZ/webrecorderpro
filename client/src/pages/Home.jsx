@@ -13,17 +13,19 @@ const Home = () => {
     const screenRef = useRef(null);
     const [recording, setRecording] = useState(false);
 
-    const [cameraStream, setCameraStream] = useState(null);
-    const [cameraRecorder, setCameraRecorder] = useState(null);
-    const [cameraBlobUrl, setCameraBlobUrl] = useState(null);
+    const [videoStream, setVideoStream] = useState(null);
+    const [videoRecorder, setVideoRecorder] = useState(null);
+    const [videoBlobUrl, setVideoBlobUrl] = useState(null);   
+    
+    const [audioStream, setAudioStream] = useState(null);
+    const [audioRecorder, setAudioRecorder] = useState(null);
+    const [audioBlobUrl, setAudioBlobUrl] = useState(null);
 
     const [screenStream, setScreenStream] = useState(null);
     const [screenRecorder, setScreenRecorder] = useState(null);
     const [screenBlobUrl, setScreenBlobUrl] = useState(null);
 
-    const [audioStream, setAudioStream] = useState(null);
-    const [audioRecorder, setAudioRecorder] = useState(null);
-    const [audioBlobUrl, setAudioBlobUrl] = useState(null);
+ 
     function updatePermission() {
         navigator.getUserMedia(
             { video: true, audio: true },
@@ -68,7 +70,7 @@ const Home = () => {
 
 
 
-    const startCameraRecording = async () => {
+    const videoRecording = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         const recorder = new MediaRecorder(stream);
         const chunks = [];
@@ -80,17 +82,17 @@ const Home = () => {
         };
 
         recorder.onstop = () => {
-            const cameraBlob = new Blob(chunks, { type: 'video/webm' });
-            const blobUrl = URL.createObjectURL(cameraBlob);
-            setCameraBlobUrl(blobUrl);
+            const videoBlob = new Blob(chunks, { type: 'video/webm' });
+            const blobUrl = URL.createObjectURL(videoBlob);
+            setVideoBlobUrl(blobUrl);
         };
 
-        setCameraStream(stream);
-        setCameraRecorder(recorder);
+        setVideoStream(stream);
+        setVideoRecorder(recorder);
         videoRef.current.srcObject = stream;
         recorder.start();
     };
-    const startAudioRecording = async () => {
+    const audioRecording = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const recorder = new MediaRecorder(stream);
         const chunks = [];
@@ -113,7 +115,7 @@ const Home = () => {
     };
 
 
-    const startScreenRecording = async () => {
+    const screenRecording = async () => {
         const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
         const recorder = new MediaRecorder(stream);
         const chunks = [];
@@ -138,22 +140,22 @@ const Home = () => {
 
     const startRecording = () => {
         if (preference.video) {
-            startCameraRecording();
+            videoRecording();
         }
         if (preference.audio) {
-            startAudioRecording();
+            audioRecording();
         }
         if (preference.screen) {
-            startScreenRecording();
+            screenRecording();
         }
         setRecording(true);
     };
 
 
     const stopRecording = () => {
-        if (cameraRecorder) {
-            cameraRecorder.stop();
-            cameraStream.getTracks().forEach((track) => track.stop());
+        if (videoRecorder) {
+            videoRecorder.stop();
+            videoStream.getTracks().forEach((track) => track.stop());
         }
 
         if (audioRecorder) {
@@ -167,19 +169,19 @@ const Home = () => {
         }
 
         setRecording(false);
-        setCameraRecorder(null);
+        setVideoRecorder(null);
         setScreenRecorder(null);
     };
 
-    const handleDownloadCameraRecording = () => {
-        if (cameraBlobUrl) {
+    const handleDownloadVideoRecording = () => {
+        if (videoBlobUrl) {
             const a = document.createElement('a');
             a.style.display = 'none';
-            a.href = cameraBlobUrl;
-            a.download = 'camera-recording.webm';
+            a.href = videoBlobUrl;
+            a.download = 'video-recording.webm';
             document.body.appendChild(a);
             a.click();
-            window.URL.revokeObjectURL(cameraBlobUrl);
+            window.URL.revokeObjectURL(videoBlobUrl);
         }
     };
     const handleDownloadAudioRecording = () => {
@@ -241,7 +243,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className={recording?"download disabled":"download"} >
-                    {preference.video && <span onClick={handleDownloadCameraRecording}>download video</span>}
+                    {preference.video && <span onClick={handleDownloadVideoRecording}>download video</span>}
                     {preference.audio && <span onClick={handleDownloadAudioRecording}>download audio</span>}
                     {preference.screen && <span onClick={handleDownloadScreenRecording}>download screenRecording</span>}
                 </div>
