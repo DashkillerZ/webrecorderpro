@@ -75,7 +75,7 @@ const Home = () => {
 
 
     const videoRecording = async () => {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: preference.audio });
         const recorder = new MediaRecorder(stream);
         const chunks = [];
 
@@ -225,7 +225,7 @@ const Home = () => {
             </div>
             <div className="flex">
 
-                <div className={recording ? "start-recording animate" : "start-recording"}>Start Recording</div>
+                <div className={recording ? "start-recording animate" : "start-recording"}>{!recording?"Start":""} Recording</div>
                 {/* <span className={recording?"dots animate":"dots"}>...</span> */}
                 <div className="options">
                     <div>
@@ -349,8 +349,10 @@ const StyledHome = styled.div`
         pointer-events: none;
         opacity: 0.5;
     }
+
     .download>span{
         margin: 8px;
+        text-align: center;
         display: flex;
         cursor: pointer;
     }
