@@ -40,8 +40,13 @@ function App() {
 
   useEffect(() => {
     verifyToken()
-    const user = JSON.parse(localStorage.getItem('user'));
-    setUser(user)
+    try{
+      const user = JSON.parse(localStorage.getItem('user'));
+      setUser(user)
+
+    }catch{
+    }
+      
     // if(user?.token ){
     //   navigate("/")
     // }

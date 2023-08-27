@@ -30,18 +30,31 @@ const key = process.env.ACCESS_TOKEN
 
 app.post("/login", async (req, res) => {
     const {email,name} = req.body;
-    const token = jwt.sign({ email: email }, key);
-    
+    const token = jwt.sign({ email: email }, key); 
     try {
         const user = await User.findOne({ email: email });
-        // console.log( user && "user found");
         if (!user) {
-            const user = new User({ email, name });
-            await user.save();
-            console.log( "new user created");
-            return res.status(401).json({ message: "User not found" });
+            return res.status(401).json({ message: "User not found  " });
         }
+        res.json({ token: token, user: user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+app.post("/signup", async (req, res) => {
+    const {email,name} = req.body;
+    const token = jwt.sign({ email: email }, key); 
 
+    const alreadyUser = await User.findOne({ email: email });
+    if(alreadyUser){
+        res.status(409).json({ message: "User with this Email Already Exists" });
+        return
+    }
+    try {
+        const user = new User({ email, name });
+        await user.save();
+        console.log( "new user created");
         res.json({ token: token, user: user });
     } catch (error) {
         console.error(error);

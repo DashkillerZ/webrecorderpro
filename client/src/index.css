@@ -4,6 +4,10 @@
   font-weight: 400;
 
   color-scheme: light dark;
+  --theme-color-1:#439A86;
+  --theme-color-2:#524948;
+  --theme-color-3:#8884FF;
+  --theme-color-4:#FFFFFF;
 
 
   font-synthesis: none;

@@ -117,8 +117,6 @@ const Home = () => {
         setAudioRecorder(recorder);
         recorder.start();
     };
-
-
     const screenRecording = async () => {
         const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
         const recorder = new MediaRecorder(stream);
@@ -142,6 +140,7 @@ const Home = () => {
         recorder.start();
     };
 
+
     const startRecording = () => {
         if (preference.video) {
             videoRecording();
@@ -154,8 +153,6 @@ const Home = () => {
         }
         setRecording(true);
     };
-
-
     const stopRecording = () => {
         if (videoRecorder) {
             videoRecorder.stop();
@@ -177,7 +174,8 @@ const Home = () => {
         setScreenRecorder(null);
     };
 
-    const handleDownloadVideoRecording = () => {
+    
+    const handleDownloadVideo = () => {
         if (videoBlobUrl) {
             const a = document.createElement('a');
             a.style.display = 'none';
@@ -188,7 +186,7 @@ const Home = () => {
             window.URL.revokeObjectURL(videoBlobUrl);
         }
     };
-    const handleDownloadAudioRecording = () => {
+    const handleDownloadAudio = () => {
         if (audioBlobUrl) {
             console.log("downloaded screen");
             const a = document.createElement('a');
@@ -200,7 +198,7 @@ const Home = () => {
             window.URL.revokeObjectURL(audioBlobUrl);
         }
     };
-    const handleDownloadScreenRecording = () => {
+    const handleDownloadScreen = () => {
         if (screenBlobUrl) {
             const a = document.createElement('a');
             a.style.display = 'none';
@@ -219,9 +217,9 @@ const Home = () => {
                 {user && <span>Hello,<b>{user?.user?.name}</b></span>}
                 {
                     user?
-                    <Link to={'/login'} className="logout" onClick={handleLogout}>logout</Link>
+                    <Link to={'/login'} className="logout" onClick={handleLogout}>logout<span className="material-symbols-outlined">logout</span></Link>
                     :
-                    <Link to={'/login'} className="login" >login</Link>
+                    <Link to={'/login'} className="login" >Login</Link>
 
                 }
             </div>
@@ -232,11 +230,11 @@ const Home = () => {
                 <div className="options">
                     <div>
                         <label htmlFor="video">video</label>
-                        <input onClick={() => setPreference((prev) => ({ ...prev, video: !preference.video }))} value={preference.video} type="checkbox" name="video" id="video" className="video" />
+                        <input disabled={!permission.video} onClick={() => setPreference((prev) => ({ ...prev, video: !preference.video }))} value={preference.video} type="checkbox" name="video" id="video" className="video" />
                     </div>
                     <div>
                         <label htmlFor="audio">audio</label>
-                        <input onClick={() => setPreference((prev) => ({ ...prev, audio: !preference.audio }))} type="checkbox" name="audio" id="audio" className="audio" />
+                        <input disabled={!permission.audio} onClick={() => setPreference((prev) => ({ ...prev, audio: !preference.audio }))} type="checkbox" name="audio" id="audio" className="audio" />
                     </div>
                     <div>
                         <label htmlFor="screen">screen</label>
@@ -257,9 +255,9 @@ const Home = () => {
                     <video ref={screenRef} autoPlay muted />
                 </div>
                 <div className={recording?"download disabled":"download"} >
-                    {preference.video && <span onClick={handleDownloadVideoRecording}>download video&nbsp;<span class="material-symbols-outlined">download</span></span>}
-                    {preference.audio && <span onClick={handleDownloadAudioRecording}>download audio&nbsp;<span class="material-symbols-outlined">download</span></span>}
-                    {preference.screen && <span onClick={handleDownloadScreenRecording}>download screenRecording&nbsp;<span class="material-symbols-outlined">download</span></span>}
+                    {preference.video && <span onClick={handleDownloadVideo}>download video&nbsp;<span class="material-symbols-outlined">download</span></span>}
+                    {preference.audio && <span onClick={handleDownloadAudio}>download audio&nbsp;<span class="material-symbols-outlined">download</span></span>}
+                    {preference.screen && <span onClick={handleDownloadScreen}>download screenRecording&nbsp;<span class="material-symbols-outlined">download</span></span>}
                 </div>
              
             </div>
@@ -267,7 +265,6 @@ const Home = () => {
     );
 }
 const StyledHome = styled.div`
-    background: #f0f0f0;
     .navbar{
         height: 70px;
         display: flex;
@@ -282,9 +279,19 @@ const StyledHome = styled.div`
         margin:0 32px 0 auto;
         color: #3c3c3c;
     }
-    .navbar .logout,.navbar .login{
-        color: blue;
-        text-decoration: underline;
+    .navbar .login{
+        margin:0 32px 0 auto;
+        background: var(--theme-color-3);
+        color: var(--theme-color-4);
+        padding: 8px 32px;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        text-decoration: none;
+    }
+    .navbar .logout{
+        display: flex;
+        align-content: center;  
+        text-decoration: none;
         cursor: pointer;
         margin:0 32px 0 auto;
 
