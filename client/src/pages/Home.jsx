@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components"
 import { GlobalContext } from "../context/GlobalContext";
 import { useContext } from "react";
+import {Link} from "react-router-dom"
 
 const Home = () => {
-    const { userName, handleLogout } = useContext(GlobalContext);
+    const { user, handleLogout } = useContext(GlobalContext);
 
     const [permission, setPermission] = useState({ video: false, audio: false, screen: false })
     const [preference, setPreference] = useState({ video: false, audio: false, screen: false })
@@ -41,6 +42,9 @@ const Home = () => {
     useEffect(() => {
         updatePermission()
     }, [])
+    useEffect(() => {
+        console.log(user);
+    }, [user])
 
     // const [dots, setDots] = useState("...");
     // useEffect(() => {
@@ -212,8 +216,14 @@ const Home = () => {
     return (
         <StyledHome>
             <div className="navbar">
-                <span>Hello,<b>{userName}</b></span>
-                <div className="logout" onClick={handleLogout}>logout</div>
+                {user && <span>Hello,<b>{user?.user?.name}</b></span>}
+                {
+                    user?
+                    <Link to={'/login'} className="logout" onClick={handleLogout}>logout</Link>
+                    :
+                    <Link to={'/login'} className="login" >login</Link>
+
+                }
             </div>
             <div className="flex">
 
@@ -242,15 +252,16 @@ const Home = () => {
                         )}
                     </div>
                 </div>
-                <div className={recording?"download disabled":"download"} >
-                    {preference.video && <span onClick={handleDownloadVideoRecording}>download video</span>}
-                    {preference.audio && <span onClick={handleDownloadAudioRecording}>download audio</span>}
-                    {preference.screen && <span onClick={handleDownloadScreenRecording}>download screenRecording</span>}
-                </div>
                 <div className="videos-panels" >
                     <video ref={videoRef} autoPlay muted />
                     <video ref={screenRef} autoPlay muted />
                 </div>
+                <div className={recording?"download disabled":"download"} >
+                    {preference.video && <span onClick={handleDownloadVideoRecording}>download video&nbsp;<span class="material-symbols-outlined">download</span></span>}
+                    {preference.audio && <span onClick={handleDownloadAudioRecording}>download audio&nbsp;<span class="material-symbols-outlined">download</span></span>}
+                    {preference.screen && <span onClick={handleDownloadScreenRecording}>download screenRecording&nbsp;<span class="material-symbols-outlined">download</span></span>}
+                </div>
+             
             </div>
         </StyledHome>
     );
@@ -271,7 +282,7 @@ const StyledHome = styled.div`
         margin:0 32px 0 auto;
         color: #3c3c3c;
     }
-    .navbar .logout{
+    .navbar .logout,.navbar .login{
         color: blue;
         text-decoration: underline;
         cursor: pointer;
@@ -324,16 +335,16 @@ const StyledHome = styled.div`
         cursor: pointer;
         transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
     }
-    .download span:hover{
+    .download>span:hover{
         text-decoration: underline;
     }
-    .download.disabled span{
+    .download.disabledspan{
         pointer-events: none;
         opacity: 0.5;
     }
-    .download span{
+    .download>span{
         margin: 8px;
-        display: block;
+        display: flex;
         cursor: pointer;
     }
     .videos-panels video{
@@ -342,6 +353,7 @@ const StyledHome = styled.div`
         width: 50%;
         margin:2px;
         border: 1px solid #3c3c3c;
+        background: black;
     }
     .videos-panels{
         width: 70%;

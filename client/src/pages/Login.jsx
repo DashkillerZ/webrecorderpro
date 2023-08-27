@@ -1,8 +1,9 @@
 import { styled } from "styled-components";
 import {GlobalContext} from "../context/GlobalContext";
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 const Login = () => {
-    const {isLoggedIn, setIsLoggedIn,navigate} = useContext(GlobalContext);
+    const {isLoggedIn, setIsLoggedIn,navigate,setUser} = useContext(GlobalContext);
     const [email,setEmail] =useState("")
     const [name,setName] =useState("")
     
@@ -17,6 +18,7 @@ const Login = () => {
         const json = await response.json();
         if(response.ok){
             localStorage.setItem('user',JSON.stringify(json))
+            setUser(json)
             navigate('/')
         }
     }
@@ -26,7 +28,10 @@ const Login = () => {
                 <div className="title">JWT Login</div>
                 <input onChange={(e)=>{setEmail(e.target.value)}} value={email} type="email" name="email" id="" placeholder="Enter Your Email" />
                 <input onChange={(e)=>{setName(e.target.value)}} value={name} type="text" name="name" id="name" placeholder="Enter Your Name" />
-                <button>Login</button>
+                <div className="button-flex">
+                    <button>Login</button>
+                    <Link to={"/"}>continue without login</Link>
+                </div>
             </form>
         </StyledLogin>
     );
@@ -69,6 +74,17 @@ const StyledLogin = styled.div`
         outline: none;
         border-bottom: 1px solid #818181;
         /* box-shadow: 0 0 10px inset #e4e4e4; */
+    }
+    form .button-flex >a {
+        color: #818181;
+    }
+    form .button-flex >a:hover {
+        color: #3c3c3c;
+    }
+    form .button-flex{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
     form button{
         background: #2079ff;

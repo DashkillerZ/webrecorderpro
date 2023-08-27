@@ -6,17 +6,44 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState(false);
 
+  const [verify, setVerify] = useState(false);
+  const [user, setUser] = useState();
   const navigate = useNavigate();
-  let user = undefined;
+
+
+  const verifyToken = async () => {
+    const token = JSON.parse(localStorage.getItem('user'))?.token;
+
+    if (token) {
+        const response = await fetch("/verify", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        console.log(response.status);
+        if (response.ok) {
+          navigate("/")
+
+        } else {
+          navigate('/login')
+
+        }
+      return setVerify(response.ok)
+    }
+  };
+
   useEffect(() => {
-    user = JSON.parse(localStorage.getItem('user'));
-    setUserName(user?.user?.name)
+  }, [])
+
+  useEffect(() => {
+    verifyToken()
+    const user = JSON.parse(localStorage.getItem('user'));
+    setUser(user)
     // if(user?.token ){
-    //   setIsLoggedIn(true)
     //   navigate("/")
-    //   console.log(user);
     // }
     // else{
     //   navigate('/login')
@@ -25,13 +52,13 @@ function App() {
 
   }, [])
   const handleLogout = () => {
-    navigate('/login')
     localStorage.removeItem('user')
 
   }
+
   return (
     <div>
-      <GlobalContext.Provider value={{ isLoggedIn, setIsLoggedIn, navigate, userName, handleLogout }}>
+      <GlobalContext.Provider value={{ isLoggedIn, setIsLoggedIn, navigate, user, handleLogout, user, setUser }}>
 
         <Routes>
 

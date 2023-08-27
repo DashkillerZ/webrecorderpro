@@ -51,3 +51,25 @@ app.post("/login", async (req, res) => {
 
 
 
+
+const verifyToken = (req, res, next) => {
+    const token = req.header("Authorization");
+
+    if (!token) {
+        return res.status(401).json({ message: "no token found" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, key);
+        req.user = decoded;
+        next(); 
+    } catch (error) {
+        console.error(error);
+        res.status(403).json({ message: "unverified tokem" });
+    }
+};
+
+app.get("/verify", verifyToken, (req, res) => {
+    res.status(200).json({ message: "verified", user: req.user });
+});
+
