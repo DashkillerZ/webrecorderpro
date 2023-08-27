@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { GlobalContext } from "../context/GlobalContext";
 import { useContext } from "react";
 import {Link} from "react-router-dom"
-
+import logo from "/logo.png"
 const Home = () => {
     const { user, handleLogout } = useContext(GlobalContext);
 
@@ -214,14 +214,20 @@ const Home = () => {
     return (
         <StyledHome>
             <div className="navbar">
-                {user && <span>Hello,<b>{user?.user?.name}</b></span>}
-                {
-                    user?
-                    <Link to={'/login'} className="logout" onClick={handleLogout}>logout<span className="material-symbols-outlined">logout</span></Link>
-                    :
-                    <Link to={'/login'} className="login" >Login</Link>
+                <div className="left">
+                    <img src={logo} alt="" />
+                    <div className="title"><span>WEB</span> <span>Recorder</span></div>
+                </div>
+                <div className="right">
+                    {user && <span>Hello,<b>{user?.user?.name}</b></span>}
+                    {
+                        user?
+                        <Link to={'/login'} className="logout" onClick={handleLogout}>logout<span className="material-symbols-outlined">logout</span></Link>
+                        :
+                        <Link to={'/login'} className="login" >Login</Link>
 
-                }
+                    }
+                </div>
             </div>
             <div className="flex">
 
@@ -265,21 +271,41 @@ const Home = () => {
     );
 }
 const StyledHome = styled.div`
-    .navbar{
+    .navbar {
         height: 70px;
         display: flex;
-        flex-direction: column  ;
-        justify-content: center;
-        /* align-items: center; */
+        align-items: center;
+        justify-content: space-between;
 
     }
+    .navbar .left{
+        display: flex;
+        align-items: center;
+        
+    }
+    .navbar .left img{
+        height: 60px;
 
-    .navbar span{
+    }
+    .navbar .left .title{
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .navbar .left .title span:first-child{color:#9183BD;}
+    .navbar .left .title span:last-child{color:#6AC1D1;}
+    .navbar .right{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+    .navbar .right span{
         font-size: 1.5rem;
         margin:0 32px 0 auto;
         color: #3c3c3c;
     }
-    .navbar .login{
+    .navbar .right .login{
         margin:0 32px 0 auto;
         background: var(--theme-color-3);
         color: var(--theme-color-4);
@@ -288,7 +314,7 @@ const StyledHome = styled.div`
         font-size: 1.2rem;
         text-decoration: none;
     }
-    .navbar .logout{
+    .navbar .right .logout{
         display: flex;
         align-content: center;  
         text-decoration: none;
