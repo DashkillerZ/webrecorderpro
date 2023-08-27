@@ -36,7 +36,7 @@ const Login = () => {
 
         let email = details.email
         let name = details.name
-        const response = await fetch("http://localhost:80/login",{
+        let response = await fetch("http://localhost:80/login",{
             method:"POST",
             headers:{'Content-Type':"application/json"},
             body:JSON.stringify({email,name})

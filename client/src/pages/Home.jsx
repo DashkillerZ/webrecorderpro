@@ -251,8 +251,8 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="videos-panels" >
-                    <video ref={videoRef} autoPlay muted />
-                    <video ref={screenRef} autoPlay muted />
+                    {preference.video && <video ref={videoRef} autoPlay muted />}
+                    {preference.screen && <video ref={screenRef} autoPlay muted />}
                 </div>
                 <div className={recording?"download disabled":"download"} >
                     {preference.video && <span onClick={handleDownloadVideo}>download video&nbsp;<span class="material-symbols-outlined">download</span></span>}
