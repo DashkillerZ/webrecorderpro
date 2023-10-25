@@ -118,7 +118,7 @@ const Home = () => {
         recorder.start();
     };
     const screenRecording = async () => {
-        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio:true });
         const recorder = new MediaRecorder(stream);
         const chunks = [];
 
