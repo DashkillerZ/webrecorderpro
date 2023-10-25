@@ -217,6 +217,7 @@ const Home = () => {
                 <div className="left">
                     <img src={logo} alt="" />
                     <div className="title"><span>WEB</span> <span>Recorder</span></div>
+                    <div className="from">Om Patel</div>
                 </div>
                 <div className="right">
                     {user && <span>Hello,<b>{user?.user?.name}</b></span>}
